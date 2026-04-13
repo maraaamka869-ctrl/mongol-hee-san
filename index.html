@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Монгол Гэрийн Хээний Дижитал Сан</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+body{font-family:'Work Sans',sans-serif;background:#fff}
+.page{display:none}.page.active{display:block}
+.hee-card{transition:all 0.35s cubic-bezier(.4,0,.2,1);border:1px solid #f3e8de}
+.hee-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(255,107,26,0.15);border-color:#FF6B1A!important}
+.chip{transition:all 0.2s;cursor:pointer}
+.chip.active{background:#FF6B1A;color:white;border-color:#FF6B1A}
+.chip:hover:not(.active){border-color:#FF6B1A;color:#FF6B1A}
+.nav-link{transition:color 0.2s;cursor:pointer}
+.nav-link.active{color:#FF6B1A;border-bottom:2px solid #FF6B1A;font-weight:600}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-box{animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#FF6B1A;color:white;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
+.ob{background:#FF6B1A;color:white;transition:all 0.2s;border:none;cursor:pointer}
+.ob:hover{background:#E55A0E}
+.ob:disabled{opacity:0.6;cursor:not-allowed}
+.drop-zone{border:2px dashed #FFD4B8;transition:all 0.2s;cursor:pointer}
+.drop-zone:hover{border-color:#FF6B1A;background:#FFF0E8}
+.mstrip{background:linear-gradient(90deg,transparent,#FF6B1A 20%,#FF8C42 40%,#FFB347 60%,#FF6B1A 80%,transparent);height:3px}
+.tvmen-bg{background-color:#FFFBF8;background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23FF6B1A' stroke-width='0.6' stroke-opacity='0.06'%3E%3Cpath d='M40 5 L75 40 L40 75 L5 40 Z'/%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3Cpath d='M40 20 L40 60'/%3E%3Cpath d='M20 40 L60 40'/%3E%3Crect x='28' y='28' width='24' height='24' rx='2'/%3E%3C/g%3E%3C/svg%3E");background-repeat:repeat}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!important;box-shadow:0 0 0 3px rgba(255,107,26,0.15)}
+.glass-nav{background:rgba(255,255,255,0.97);backdrop-filter:blur(20px)}
+.like-btn{transition:all 0.3s cubic-bezier(.4,0,.2,1);cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.like-btn:hover{transform:scale(1.15)}
+.like-btn.liked .material-symbols-outlined{font-variation-settings:'FILL' 1;color:#FF6B1A}
+.like-btn .material-symbols-outlined{font-variation-settings:'FILL' 0;color:#9ca3af;transition:all 0.3s}
+.like-btn:hover .material-symbols-outlined{color:#FF6B1A}
+@keyframes likePop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+.like-btn.pop .material-symbols-outlined{animation:likePop 0.4s ease}
+.comment-item{border-bottom:1px solid #FFF0E8;padding:12px 0}
+.comment-item:last-child{border-bottom:none}
+.comment-input-wrap{display:flex;gap:8px;align-items:flex-start;padding-top:12px;border-top:1px solid #FFF0E8}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<nav class="fixed top-0 w-full z-50 glass-nav shadow-sm border-b border-orange-100">
+  <div class="mstrip"></div>
+  <div class="flex justify-between items-center w-full px-5 h-16 max-w-screen-xl mx-auto">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="showPage('home')">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB/4mj8TRRXwx+tADzyTjvUt1EYLmWI5BRitOsLaW8vYbeCFp5HYARr1Ydx7cZ57Va8Rsr6/qLI8cifaH2tGQVK54xjtjAquX3eYzc/3ih5X/IzvxNH4miipNAoqaztZr26itrWNpZ5WCoi9Sa9n8JfD+w0uKOfU0S9vup3jMcZ9FHf6n9K6sLhKmJdo7dzz8fmVHAxvU1b2XU8r8NC+hunmtdNuL2GWJ4JFjRvmRxg4YA4PvTvE32yWaF59Mu7OGGIQoZ1YswBJyzkDJ5/AYFfQN7dQadZPPOdkMYHCj8AAB1JOAB6miyuoNRskngO+GQHhh07EEHoQcgj1Fer/Za5fZe089v6Z87/AG++f2/sdNr3f/DX+R8x0V7b4t+H9hqkUk+mIllfdRtGI5D6MO31H614xeWs1ldy211G0U8TFXRuoNeVisJUwztLbufR4DMqOOjeno1unud78L7JLdJtUe5WGckwxbrVpcLxuII4GTx+Feg/2lJ/0FE/8F8n+NcT4R8faXonh2z0+e2vGliDb2jVdpJYnjLe9bH/AAtPR/8An01D/vhP/iq9fC1qFKlGPOl9+/3nzWPw2Lr4ic/ZNq+m23ToQeMtQnaW2jF68kUkB3qIzErAsR909c4ALf8ALPG/vS+Db+dXuY/trxxRwDYpTzVUBgPujpjON3/LTO/tVfWfiFomp2MsDW2oRuylVkEaErnqPvcg4wR3GRRo3xC0PTLGKBbXUHdVAaTy0BbHQfe4AzgDsMCl7al7bn9pp8x/VsR9W9n7F3+X37W8v6udZ/aUn/QUT/wXyf41598ULJJ1g1RLlZpgRDLttWiyvO0kng4PH410f/C09H/59NQ/74T/AOKrH8X+PtL1vw7eafBbXiyyhdjSKu0EMDzhvaniq1CrSlHnT+/f7xZfhsXQxEJ+yaV9dtnv0P/Z" class="w-10 h-10 rounded-lg object-contain" alt="лого"/>
+      <div class="text-sm font-black leading-tight hidden sm:block" style="font-family:'Noto Serif',serif;color:#FF6B1A">Монгол Гэрийн<br/><span style="color:#333">Хээний Дижитал Сан</span></div>
+    </div>
+    <div class="hidden md:flex items-center gap-5 text-sm font-medium">
+      <a class="nav-link active text-gray-700" onclick="showPage('home')">Нүүр</a>
+      <a class="nav-link text-gray-700" onclick="showPage('gallery')">Хээний сан</a>
+      <a class="nav-link text-gray-700" onclick="showPage('profile')">Миний сан</a>
+      <a class="nav-link text-gray-700" onclick="showPage('publish')">Нийтлэх</a>
+      <a class="nav-link text-gray-700" onclick="showPage('contact')">Холбоо барих</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="relative hidden lg:block">
+        <input id="search-nav" class="bg-orange-50 border border-orange-200 rounded-full px-4 py-1.5 text-xs w-40 outline-none" placeholder="Хайх..." onkeyup="if(event.key==='Enter'){showPage('gallery');doSearch()}"/>
+        <button onclick="showPage('gallery');doSearch()" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"><span class="material-symbols-outlined text-sm">search</span></button>
+      </div>
+      <div id="nav-auth" class="flex items-center gap-2">
+        <button onclick="openModal('login')" class="text-xs font-medium text-gray-600 hover:text-orange-500 px-3 py-1.5">Нэвтрэх</button>
+        <button onclick="openModal('register')" class="ob text-xs font-semibold px-4 py-2 rounded-lg">Бүртгүүлэх</button>
+      </div>
+      <div id="nav-user" class="items-center gap-2 flex-shrink-0" style="display:none">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('profile')">
+          <div id="nav-av" class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold overflow-hidden" style="background:#FF6B1A">У</div>
+          <span class="text-sm font-medium hidden sm:block" id="nav-uname">Хэрэглэгч</span>
+        </div>
+        <button onclick="doLogout()" class="text-xs text-gray-400 hover:text-orange-500 ml-1"><span class="material-symbols-outlined text-base">logout</span></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active pt-16">
+  <section class="min-h-96 flex items-center relative overflow-hidden" style="background:linear-gradient(180deg,#FFF8F5 0%,#FFE8D6 50%,#FFDCC8 100%);background-image:url(\"data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23FF6B1A' stroke-width='0.5' stroke-opacity='0.06'%3E%3Cpath d='M60 10 L90 50 L60 90 L30 50 Z'/%3E%3Ccircle cx='60' cy='50' r='25'/%3E%3Cpath d='M60 25 L60 75'/%3E%3Cpath d='M35 50 L85 50'/%3E%3Cpath d='M45 35 L75 65'/%3E%3Cpath d='M75 35 L45 65'/%3E%3C/g%3E%3C/svg%3E\")">
+    <div class="absolute inset-0 bg-gradient-to-r from-white/80 to-transparent z-10"></div>
+    <div class="relative z-20 max-w-screen-xl mx-auto px-6 w-full py-16">
+      <div class="max-w-lg">
+        <div class="flex justify-center mb-6"><svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="opacity-80">
+<path d="M60 5 C60 5 62 15 60 20 C58 15 60 5 60 5Z" fill="#FF6B1A" opacity="0.7"/>
+<path d="M58 18 Q58 22 60 25 Q62 22 62 18" fill="#FF6B1A" opacity="0.5"/>
+<path d="M20 65 Q60 25 100 65" fill="none" stroke="#FF6B1A" stroke-width="2.5"/>
+<rect x="18" y="64" width="84" height="4" rx="1" fill="#FF6B1A" opacity="0.9"/>
+<rect x="18" y="72" width="84" height="4" rx="1" fill="#FF6B1A" opacity="0.6"/>
+<path d="M20 65 L20 82 L100 82 L100 65" fill="none" stroke="#FF6B1A" stroke-width="2"/>
+<path d="M52 55 L60 47 L68 55 L64 55 L64 47 L60 43 L56 47 L56 55Z" fill="#FF6B1A" opacity="0.8"/>
+<path d="M50 53 L60 43 L70 53" fill="none" stroke="#FF6B1A" stroke-width="1.5"/>
+<path d="M54 57 L60 51 L66 57" fill="none" stroke="#FF6B1A" stroke-width="1"/>
+</svg></div>
+        <div class="inline-flex items-center gap-2 border rounded-full px-4 py-1.5 text-xs font-semibold mb-5" style="border-color:#FF6B1A;color:#FF6B1A;background:#FFF0E8">✦ УЛАМЖЛАЛ · УРЛАГ · ДИЖИТАЛ ✦</div>
+        <h1 style="font-family:'Noto Serif',serif;font-size:2.5rem;font-weight:900;line-height:1.2;margin-bottom:1rem;color:#FF6B1A">Монгол Гэрийн<br/><span style="color:#1a1a1a">Хээний Дижитал Сан</span></h1>
+        <p class="text-gray-600 text-sm leading-relaxed mb-7 max-w-sm">Уламжлалт хээ угалзын цахим архив. Өв соёлоо дижитал хэлбэрээр өвлүүлэн үлдээж байна.</p>
+        <div class="flex gap-3 flex-wrap">
+          <button onclick="showPage('gallery')" class="ob flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm shadow-lg"><span class="material-symbols-outlined text-lg">grid_view</span>Хээ үзэх</button>
+          <button onclick="openModal('register')" class="flex items-center gap-2 bg-white border-2 px-6 py-3 rounded-xl font-semibold text-sm" style="border-color:#FF6B1A;color:#FF6B1A;cursor:pointer">Бүртгүүлэх</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="mstrip"></div>
+  <div class="bg-white border-b border-orange-100">
+    <div class="max-w-screen-xl mx-auto px-6 grid grid-cols-4 divide-x divide-orange-100">
+      <div class="py-5 text-center"><div style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A" id="stat-posts">0</div><div class="text-xs text-gray-500 mt-0.5">Нийтлэл</div></div>
+      <div class="py-5 text-center"><div style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A">18</div><div class="text-xs text-gray-500 mt-0.5">Ангилал</div></div>
+      <div class="py-5 text-center"><div style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A">🇲🇳</div><div class="text-xs text-gray-500 mt-0.5">Монгол</div></div>
+      <div class="py-5 text-center"><div style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A">✦</div><div class="text-xs text-gray-500 mt-0.5">Уламжлал</div></div>
+    </div>
+  </div>
+  <section class="max-w-screen-xl mx-auto px-6 py-14 grid md:grid-cols-2 gap-12 items-center">
+    <div class="aspect-square max-w-sm rounded-2xl overflow-hidden shadow-2xl" style="background:linear-gradient(135deg,#FF6B1A,#E55A0E)">
+      <div class="w-full h-full flex items-center justify-center p-8">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB/4mj8TRRXwx+tADzyTjvUt1EYLmWI5BRitOsLaW8vYbeCFp5HYARr1Ydx7cZ57Va8Rsr6/qLI8cifaH2tGQVK54xjtjAquX3eYzc/3ih5X/IzvxNH4miipNAoqaztZr26itrWNpZ5WCoi9Sa9n8JfD+w0uKOfU0S9vup3jMcZ9FHf6n9K6sLhKmJdo7dzz8fmVHAxvU1b2XU8r8NC+hunmtdNuL2GWJ4JFjRvmRxg4YA4PvTvE32yWaF59Mu7OGGIQoZ1YswBJyzkDJ5/AYFfQN7dQadZPPOdkMYHCj8AAB1JOAB6miyuoNRskngO+GQHhh07EEHoQcgj1Fer/Za5fZe089v6Z87/AG++f2/sdNr3f/DX+R8x0V7b4t+H9hqkUk+mIllfdRtGI5D6MO31H614xeWs1ldy211G0U8TFXRuoNeVisJUwztLbufR4DMqOOjeno1unud78L7JLdJtUe5WGckwxbrVpcLxuII4GTx+Feg/2lJ/0FE/8F8n+NcT4R8faXonh2z0+e2vGliDb2jVdpJYnjLe9bH/AAtPR/8An01D/vhP/iq9fC1qFKlGPOl9+/3nzWPw2Lr4ic/ZNq+m23ToQeMtQnaW2jF68kUkB3qIzErAsR909c4ALf8ALPG/vS+Db+dXuY/trxxRwDYpTzVUBgPujpjON3/LTO/tVfWfiFomp2MsDW2oRuylVkEaErnqPvcg4wR3GRRo3xC0PTLGKBbXUHdVAaTy0BbHQfe4AzgDsMCl7al7bn9pp8x/VsR9W9n7F3+X37W8v6udZ/aUn/QUT/wXyf41598ULJJ1g1RLlZpgRDLttWiyvO0kng4PH410f/C09H/59NQ/74T/AOKrH8X+PtL1vw7eafBbXiyyhdjSKu0EMDzhvaniq1CrSlHnT+/f7xZfhsXQxEJ+yaV9dtnv0P/Z" class="w-full h-full object-contain" style="filter:brightness(0) invert(1);opacity:0.9" alt="лого"/>
+      </div>
+    </div>
+    <div>
+      <div class="flex items-center gap-3 mb-4"><div class="w-1 h-8 rounded" style="background:#FF6B1A"></div><h2 style="font-family:'Noto Serif',serif;font-size:1.75rem;font-weight:900">Бидний зорилго</h2></div>
+      <p class="text-gray-600 leading-relaxed mb-4">Монгол үндэстний хээ угалз бол зүгээр нэг чимэглэл биш, гүн гүнзгий утга бөлгөтэй, түүх соёлын өнгөрүүлийн юм.</p>
+      <p class="text-gray-600 leading-relaxed mb-6">Манай санд хээ угалз, утга учир, хэрэглэгдэх байдлын бүрэн мэдээлэл хадгалагдаж бөгөөд судлаачид, сонирхогч хэн бүхэнд нээлттэй.</p>
+      <button onclick="showPage('gallery')" class="flex items-center gap-2 font-semibold text-sm" style="color:#FF6B1A;background:none;border:none;cursor:pointer">Хээний санг үзэх <span class="material-symbols-outlined text-lg">arrow_forward</span></button>
+    </div>
+  </section>
+</div>
+
+<!-- GALLERY -->
+<div id="page-gallery" class="page tvmen-bg pt-16 min-h-screen">
+  <div class="max-w-screen-xl mx-auto px-6 py-8">
+    <div class="mb-5 flex items-center justify-between flex-wrap gap-3">
+      <div><h1 style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A">Хээний Сан</h1><p class="text-gray-500 text-xs">Монгол уламжлалт хээ болон бүтээлүүд</p></div>
+      <div class="flex gap-2">
+        <input id="search-gallery" class="bg-white border border-orange-200 rounded-full px-4 py-2 text-xs outline-none w-44" placeholder="Хайх..." onkeyup="if(event.key==='Enter')doSearch()"/>
+        <button onclick="doSearch()" class="ob px-4 py-2 rounded-full text-xs font-medium">Хайх</button>
+      </div>
+    </div>
+    <div class="flex gap-2 flex-wrap mb-6">
+      <button class="chip active text-xs px-4 py-2 rounded-full border border-orange-200 font-medium" onclick="filterCat(this,'')">Бүгд</button>
+      <button class="chip text-xs px-4 py-2 rounded-full border border-orange-200 font-medium text-gray-600" onclick="filterCat(this,'Геометр')">Геометр</button>
+      <button class="chip text-xs px-4 py-2 rounded-full border border-orange-200 font-medium text-gray-600" onclick="filterCat(this,'Ургамал')">Ургамал</button>
+      <button class="chip text-xs px-4 py-2 rounded-full border border-orange-200 font-medium text-gray-600" onclick="filterCat(this,'Амьтан')">Амьтан</button>
+      <button class="chip text-xs px-4 py-2 rounded-full border border-orange-200 font-medium text-gray-600" onclick="filterCat(this,'Одон')">Одон</button>
+      <button class="chip text-xs px-4 py-2 rounded-full border border-orange-200 font-medium text-gray-600" onclick="filterCat(this,'Уламжлалт')">Уламжлалт</button>
+      <button class="chip text-xs px-4 py-2 rounded-full border border-orange-200 font-medium text-gray-600" onclick="filterCat(this,'Бусад')">Бусад</button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5" id="gallery-grid">
+      <div class="col-span-3 text-center py-12 text-gray-400"><span class="material-symbols-outlined text-4xl block mb-2">hourglass_empty</span><p>Ачааллаж байна...</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="page-profile" class="page tvmen-bg pt-16 min-h-screen">
+  <div class="max-w-screen-xl mx-auto px-6 py-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-orange-100 overflow-hidden mb-5">
+      <div class="h-20 relative overflow-hidden" style="background:linear-gradient(135deg,#FF6B1A,#FFB347)">
+        <svg class="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 800 80" preserveAspectRatio="xMidYMid slice"><g fill="white"><polygon points="0,40 20,20 40,40 20,60"/><polygon points="50,40 70,20 90,40 70,60"/><polygon points="100,40 120,20 140,40 120,60"/><polygon points="150,40 170,20 190,40 170,60"/><polygon points="200,40 220,20 240,40 220,60"/><polygon points="250,40 270,20 290,40 270,60"/><polygon points="300,40 320,20 340,40 320,60"/><polygon points="350,40 370,20 390,40 370,60"/><polygon points="400,40 420,20 440,40 420,60"/><polygon points="450,40 470,20 490,40 470,60"/><polygon points="500,40 520,20 540,40 520,60"/><polygon points="550,40 570,20 590,40 570,60"/><polygon points="600,40 620,20 640,40 620,60"/><polygon points="650,40 670,20 690,40 670,60"/><polygon points="700,40 720,20 740,40 720,60"/><polygon points="750,40 770,20 790,40 770,60"/></g></svg>
+      </div>
+      <div class="px-7 pb-6">
+        <div class="flex items-end gap-4 -mt-10 mb-4">
+          <div id="prof-av" class="w-20 h-20 rounded-full border-4 border-white flex items-center justify-center text-white text-2xl font-bold shadow-lg overflow-hidden flex-shrink-0" style="background:#FF6B1A;font-family:'Noto Serif',serif">У</div>
+          <div class="pb-1 flex-1">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 style="font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:900" id="prof-name">Хэрэглэгч</h2>
+                <p class="text-xs text-gray-500" id="prof-email">Нэвтэрч орно уу</p>
+              </div>
+              <button onclick="openModal('editProfile')" class="flex items-center gap-1 border border-orange-200 text-xs font-medium px-3 py-1.5 rounded-lg" style="color:#FF6B1A;background:none;cursor:pointer"><span class="material-symbols-outlined text-sm">edit</span>Засах</button>
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 mb-4 italic" id="prof-bio">Тайлбар байхгүй</p>
+        <div class="flex gap-8 mb-4 border-b border-orange-100 pb-4">
+          <div class="text-center"><div style="font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:900;color:#FF6B1A" id="prof-count">0</div><div class="text-xs text-gray-500">Нийтлэл</div></div>
+          <div class="text-center"><div style="font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:900;color:#FF6B1A">0</div><div class="text-xs text-gray-500">Дагагчид</div></div>
+        </div>
+        <button onclick="showPage('publish')" class="ob flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm"><span class="material-symbols-outlined text-base">add</span>Ажил нийтлэх</button>
+      </div>
+    </div>
+    <div class="flex border-b border-orange-100 mb-5 bg-white rounded-t-xl px-5">
+      <button class="py-4 px-4 text-sm font-semibold border-b-2 flex items-center gap-2" style="color:#FF6B1A;border-color:#FF6B1A;background:none;cursor:pointer"><span class="material-symbols-outlined text-base">grid_view</span>Миний ажлууд</button>
+      <button class="py-4 px-4 text-sm font-medium text-gray-500 flex items-center gap-2" style="background:none;cursor:pointer"><span class="material-symbols-outlined text-base">bookmark</span>Хадгалсан</button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="my-grid"></div>
+  </div>
+</div>
+
+<!-- PUBLISH -->
+<div id="page-publish" class="page pt-16 min-h-screen" style="background:#FFF8F5">
+  <div class="max-w-4xl mx-auto px-6 py-10">
+    <h1 style="font-family:'Noto Serif',serif;font-size:2rem;font-weight:900;margin-bottom:0.5rem;color:#FF6B1A">Бүтээл нийтлэх</h1>
+    <p class="text-gray-500 text-sm mb-8">Монгол хээ болон өөрийн бүтээлийг хуваалцаарай</p>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+      <div class="lg:col-span-7 space-y-5">
+        <div class="bg-white rounded-2xl border border-orange-100 shadow-sm p-7 space-y-5">
+          <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#FF6B1A">Нийтлэлийн төрөл</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="flex items-center gap-2 p-3 rounded-xl border cursor-pointer" style="border-color:#FF6B1A;background:#FFF0E8">
+                <input type="radio" name="ptype" value="hee" checked class="accent-orange-500"/><span class="text-sm font-medium" style="color:#FF6B1A">🎨 Монгол хээ</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 rounded-xl border border-gray-200 cursor-pointer hover:border-orange-300">
+                <input type="radio" name="ptype" value="work"/><span class="text-sm font-medium text-gray-700">💼 Өөр бүтээл</span>
+              </label>
+            </div>
+          </div>
+          <div><label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#FF6B1A">Гарчиг</label>
+            <input id="pub-title" type="text" placeholder="Бүтээлийн нэр..." class="w-full bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-base placeholder-gray-300" style="font-family:'Noto Serif',serif"/></div>
+          <div><label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#FF6B1A">Ангилал</label>
+            <select id="pub-cat" class="w-full bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm">
+              <option>Геометр</option><option>Ургамал</option><option>Амьтан</option><option>Одон</option><option>Уламжлалт</option><option>Зураг</option><option>Дизайн</option><option>Бусад</option>
+            </select></div>
+          <div><label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#FF6B1A">Тайлбар</label>
+            <textarea id="pub-desc" rows="5" placeholder="Бүтээлийн тухай тайлбар..." class="w-full bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm placeholder-gray-300 resize-none leading-relaxed"></textarea></div>
+        </div>
+      </div>
+      <div class="lg:col-span-5 space-y-4">
+        <div class="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
+          <label class="block text-xs font-semibold uppercase tracking-wider mb-3" style="color:#FF6B1A">Зураг оруулах</label>
+          <div class="drop-zone rounded-xl p-6 text-center relative mb-3">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2" style="background:#FFF0E8"><span class="material-symbols-outlined text-2xl" style="color:#FF6B1A">image</span></div>
+            <p class="font-medium text-sm text-gray-700 mb-1">🖼️ Зураг оруулах</p>
+            <p class="text-xs text-gray-400">PNG, JPG, SVG (Макс 5MB)</p>
+            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleFile(this,'image')"/>
+          </div>
+          <div id="pub-img-preview" class="mb-3"></div>
+          <label class="block text-xs font-semibold uppercase tracking-wider mb-3" style="color:#FF6B1A">Файл оруулах (задгай файл)</label>
+          <div class="drop-zone rounded-xl p-6 text-center relative">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2" style="background:#FFF0E8"><span class="material-symbols-outlined text-2xl" style="color:#FF6B1A">folder_open</span></div>
+            <p class="font-medium text-sm text-gray-700 mb-1">📁 Файл оруулах</p>
+            <p class="text-xs text-gray-400">SVG, PDF, AI, ZIP гэх мэт</p>
+            <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleFile(this,'file')"/>
+          </div>
+          <div id="pub-file-preview" class="mt-2"></div>
+        </div>
+        <button id="pub-btn" onclick="doPublish()" class="ob w-full py-4 rounded-xl font-bold text-base shadow-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">publish</span>Нийтлэх</button>
+        <button class="w-full py-3 text-gray-400 text-sm hover:text-orange-500 transition-colors" style="background:none;cursor:pointer">Ноорог болгож хадгалах</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div id="page-contact" class="page pt-16 min-h-screen" style="background:#FFF8F5">
+  <div class="max-w-2xl mx-auto px-6 py-12">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background:#FFF0E8"><span class="material-symbols-outlined text-3xl" style="color:#FF6B1A">mail</span></div>
+      <h1 style="font-family:'Noto Serif',serif;font-size:2rem;font-weight:900;color:#FF6B1A;margin-bottom:0.5rem">Холбоо барих</h1>
+      <p class="text-gray-500 text-sm">Асуулт, санал хүсэлтээ илгээгээрэй</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-orange-100 shadow-sm p-8 space-y-5">
+      <div><label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#FF6B1A">Сэдэв</label>
+        <input id="con-subj" type="text" placeholder="Мессежийн сэдэв..." class="w-full bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm"/></div>
+      <div><label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#FF6B1A">Мессеж</label>
+        <textarea id="con-msg" rows="6" placeholder="Мессежээ бичнэ үү..." class="w-full bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm resize-none leading-relaxed"></textarea></div>
+      <button id="con-btn" onclick="doContact()" class="ob w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2"><span class="material-symbols-outlined">send</span>Илгээх</button>
+    </div>
+    <div class="mt-8 grid grid-cols-3 gap-4">
+      <div class="bg-white rounded-xl border border-orange-100 p-5 text-center"><span class="material-symbols-outlined text-2xl block mb-2" style="color:#FF6B1A">location_on</span><p class="text-xs text-gray-500">Улаанбаатар, Монгол</p></div>
+      <div class="bg-white rounded-xl border border-orange-100 p-5 text-center"><span class="material-symbols-outlined text-2xl block mb-2" style="color:#FF6B1A">mail</span><p class="text-xs text-gray-500">info@heeSan.mn</p></div>
+      <div class="bg-white rounded-xl border border-orange-100 p-5 text-center"><span class="material-symbols-outlined text-2xl block mb-2" style="color:#FF6B1A">schedule</span><p class="text-xs text-gray-500">Даваа-Баасан</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="modal-register" onclick="if(event.target===this)closeModal('register')">
+  <div class="modal-box bg-white rounded-2xl w-full max-w-md shadow-2xl mx-4 relative" style="border-top:4px solid #FF6B1A">
+    <div class="p-8">
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#FFF0E8"><span class="material-symbols-outlined text-2xl" style="color:#FF6B1A;font-variation-settings:'FILL' 1">person_add</span></div>
+        <h2 style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A">Бүртгэл үүсгэх</h2>
+        <p class="text-xs text-gray-500 mt-1">Монгол хээний дижитал санд тавтай морилно уу</p>
+      </div>
+      <div class="space-y-4">
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">Нэр</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-gray-400"><span class="material-symbols-outlined text-lg">person</span></span>
+          <input id="reg-name" type="text" placeholder="Таны нэр" class="w-full pl-10 pr-4 py-3 bg-orange-50 border border-orange-200 rounded-xl text-sm"/></div></div>
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">И-мэйл</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-gray-400"><span class="material-symbols-outlined text-lg">mail</span></span>
+          <input id="reg-email" type="email" placeholder="example@gmail.com" class="w-full pl-10 pr-4 py-3 bg-orange-50 border border-orange-200 rounded-xl text-sm"/></div></div>
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">Нууц үг</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-gray-400"><span class="material-symbols-outlined text-lg">lock</span></span>
+          <input id="reg-pw" type="password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 bg-orange-50 border border-orange-200 rounded-xl text-sm"/></div></div>
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">Нууц үг давтах</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-gray-400"><span class="material-symbols-outlined text-lg">lock_reset</span></span>
+          <input id="reg-pw2" type="password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 bg-orange-50 border border-orange-200 rounded-xl text-sm"/></div></div>
+        <p id="reg-err" class="text-xs text-red-500 font-medium" style="min-height:1rem"></p>
+        <button id="reg-btn" onclick="doRegister()" class="ob w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2">
+          <span>Бүртгүүлэх</span><span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+      <div class="mt-5 pt-4 border-t border-orange-100 text-center">
+        <p class="text-xs text-gray-500">Бүртгэлтэй юу? <a onclick="switchModal('register','login')" class="font-bold cursor-pointer" style="color:#FF6B1A">Нэвтрэх</a></p>
+      </div>
+      <button onclick="closeModal('register')" style="position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:#9ca3af"><span class="material-symbols-outlined">close</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="modal-login" onclick="if(event.target===this)closeModal('login')">
+  <div class="modal-box bg-white rounded-2xl w-full max-w-md shadow-2xl mx-4 relative" style="border-top:4px solid #FF6B1A">
+    <div class="p-8">
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#FFF0E8"><span class="material-symbols-outlined text-2xl" style="color:#FF6B1A;font-variation-settings:'FILL' 1">login</span></div>
+        <h2 style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A">Нэвтрэх</h2>
+      </div>
+      <div class="space-y-4">
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">И-мэйл</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-gray-400"><span class="material-symbols-outlined text-lg">mail</span></span>
+          <input id="log-email" type="email" placeholder="example@gmail.com" class="w-full pl-10 pr-4 py-3 bg-orange-50 border border-orange-200 rounded-xl text-sm"/></div></div>
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">Нууц үг</label>
+          <div class="relative"><span class="absolute inset-y-0 left-3 flex items-center text-gray-400"><span class="material-symbols-outlined text-lg">lock</span></span>
+          <input id="log-pw" type="password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 bg-orange-50 border border-orange-200 rounded-xl text-sm"/></div></div>
+        <p id="log-err" class="text-xs text-red-500 font-medium" style="min-height:1rem"></p>
+        <button id="log-btn" onclick="doLogin()" class="ob w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2">
+          <span>Нэвтрэх</span><span class="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
+      <div class="mt-5 pt-4 border-t border-orange-100 text-center">
+        <p class="text-xs text-gray-500">Бүртгэлгүй юу? <a onclick="switchModal('login','register')" class="font-bold cursor-pointer" style="color:#FF6B1A">Бүртгүүлэх</a></p>
+      </div>
+      <button onclick="closeModal('login')" style="position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:#9ca3af"><span class="material-symbols-outlined">close</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-overlay" id="modal-editProfile" onclick="if(event.target===this)closeModal('editProfile')">
+  <div class="modal-box bg-white rounded-2xl w-full max-w-md shadow-2xl mx-4 relative" style="border-top:4px solid #FF6B1A">
+    <div class="p-8">
+      <h2 style="font-family:'Noto Serif',serif;font-size:1.25rem;font-weight:900;text-align:center;margin-bottom:1.5rem;color:#FF6B1A">Профайл засах</h2>
+      <div class="space-y-4">
+        <div class="text-center">
+          <div class="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-2 overflow-hidden relative cursor-pointer" style="background:#FF6B1A;font-family:'Noto Serif',serif" id="edit-av-prev" onclick="document.getElementById('av-upload').click()">У
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);opacity:0;transition:opacity 0.2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span class="material-symbols-outlined text-white text-xl">photo_camera</span></div>
+          </div>
+          <input type="file" id="av-upload" accept="image/*" class="hidden" onchange="handleAvatar(this)"/>
+          <button onclick="document.getElementById('av-upload').click()" style="background:none;border:none;cursor:pointer;color:#FF6B1A;font-size:0.75rem;font-weight:500">Зураг солих</button>
+        </div>
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">Нэр</label>
+          <input id="edit-name" type="text" placeholder="Таны нэр" class="w-full bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm"/></div>
+        <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#FF6B1A">Био</label>
+          <textarea id="edit-bio" rows="3" placeholder="Өөрийн тухай товч бичнэ үү..." class="w-full bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
+        <button id="save-prof-btn" onclick="saveProfile()" class="ob w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2"><span class="material-symbols-outlined">save</span>Хадгалах</button>
+      </div>
+      <button onclick="closeModal('editProfile')" style="position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:#9ca3af"><span class="material-symbols-outlined">close</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- POST DETAIL MODAL -->
+<div class="modal-overlay" id="modal-detail" onclick="if(event.target===this)closeModal('detail')">
+  <div class="modal-box bg-white rounded-2xl w-full max-w-2xl shadow-2xl mx-4 relative overflow-hidden">
+    <img id="det-img" src="" class="w-full object-contain bg-gray-50" style="max-height:18rem;display:none"/>
+    <div class="p-7">
+      <div class="flex items-start gap-3 mb-3">
+        <div class="flex-1"><h2 style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900" id="det-title"></h2></div>
+        <div class="flex gap-2 flex-shrink-0">
+          <span class="text-xs px-2 py-1 rounded-full text-white font-semibold" style="background:#FF6B1A" id="det-type"></span>
+          <span class="text-xs px-2 py-1 rounded-full bg-orange-100 font-semibold" style="color:#FF6B1A" id="det-cat"></span>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600 leading-relaxed mb-5" id="det-desc"></p>
+      <div class="flex items-center justify-between pt-4 border-t border-orange-100 flex-wrap gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" style="background:#FF6B1A" id="det-av">У</div>
+          <span class="text-sm font-medium" id="det-author"></span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="like-btn" id="det-like-btn" onclick="toggleLike()">
+            <span class="material-symbols-outlined text-xl">favorite</span>
+            <span class="text-sm font-semibold text-gray-500" id="det-like-count">0</span>
+          </button>
+          <div class="flex gap-2" id="det-download-btns"></div>
+        </div>
+      </div>
+      <div class="mt-5 pt-4 border-t border-orange-100">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-lg" style="color:#FF6B1A">chat_bubble</span>
+          <h3 class="text-sm font-bold" style="color:#333">Сэтгэгдэл (<span id="det-comment-count">0</span>)</h3>
+        </div>
+        <div id="det-comments" class="max-h-48 overflow-y-auto mb-3" style="scrollbar-width:thin"></div>
+        <div class="comment-input-wrap">
+          <textarea id="comment-input" rows="2" placeholder="Сэтгэгдэл бичих..." class="flex-1 bg-orange-50 border border-orange-200 rounded-xl px-3 py-2 text-sm resize-none placeholder-gray-400" style="min-height:40px"></textarea>
+          <button onclick="postComment()" class="ob px-4 py-2 rounded-xl text-sm font-semibold flex-shrink-0 flex items-center gap-1"><span class="material-symbols-outlined text-sm">send</span></button>
+        </div>
+      </div>
+    </div>
+    <button onclick="closeModal('detail')" style="position:absolute;top:1rem;right:1rem;background:white;border:none;cursor:pointer;color:#9ca3af;border-radius:50%;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.15)"><span class="material-symbols-outlined text-lg">close</span></button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-white border-t border-orange-100 pt-8 pb-6">
+  <div class="max-w-screen-xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-5">
+      <div class="flex items-center gap-3">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB/4mj8TRRXwx+tADzyTjvUt1EYLmWI5BRitOsLaW8vYbeCFp5HYARr1Ydx7cZ57Va8Rsr6/qLI8cifaH2tGQVK54xjtjAquX3eYzc/3ih5X/IzvxNH4miipNAoqaztZr26itrWNpZ5WCoi9Sa9n8JfD+w0uKOfU0S9vup3jMcZ9FHf6n9K6sLhKmJdo7dzz8fmVHAxvU1b2XU8r8NC+hunmtdNuL2GWJ4JFjRvmRxg4YA4PvTvE32yWaF59Mu7OGGIQoZ1YswBJyzkDJ5/AYFfQN7dQadZPPOdkMYHCj8AAB1JOAB6miyuoNRskngO+GQHhh07EEHoQcgj1Fer/Za5fZe089v6Z87/AG++f2/sdNr3f/DX+R8x0V7b4t+H9hqkUk+mIllfdRtGI5D6MO31H614xeWs1ldy211G0U8TFXRuoNeVisJUwztLbufR4DMqOOjeno1unud78L7JLdJtUe5WGckwxbrVpcLxuII4GTx+Feg/2lJ/0FE/8F8n+NcT4R8faXonh2z0+e2vGliDb2jVdpJYnjLe9bH/AAtPR/8An01D/vhP/iq9fC1qFKlGPOl9+/3nzWPw2Lr4ic/ZNq+m23ToQeMtQnaW2jF68kUkB3qIzErAsR909c4ALf8ALPG/vS+Db+dXuY/trxxRwDYpTzVUBgPujpjON3/LTO/tVfWfiFomp2MsDW2oRuylVkEaErnqPvcg4wR3GRRo3xC0PTLGKBbXUHdVAaTy0BbHQfe4AzgDsMCl7al7bn9pp8x/VsR9W9n7F3+X37W8v6udZ/aUn/QUT/wXyf41598ULJJ1g1RLlZpgRDLttWiyvO0kng4PH410f/C09H/59NQ/74T/AOKrH8X+PtL1vw7eafBbXiyyhdjSKu0EMDzhvaniq1CrSlHnT+/f7xZfhsXQxEJ+yaV9dtnv0P/Z" class="w-10 h-10 rounded-lg object-contain" alt="лого"/>
+        <div style="font-family:'Noto Serif',serif;font-size:0.875rem;font-weight:900;line-height:1.25;color:#FF6B1A">Монгол Гэрийн<br/><span style="color:#333">Хээний Дижитал Сан</span></div>
+      </div>
+      <div class="flex gap-5 text-sm">
+        <a onclick="showPage('home')" class="text-gray-500 hover:text-orange-500 cursor-pointer">Нүүр</a>
+        <a onclick="showPage('gallery')" class="text-gray-500 hover:text-orange-500 cursor-pointer">Хээний сан</a>
+        <a onclick="showPage('publish')" class="text-gray-500 hover:text-orange-500 cursor-pointer">Нийтлэх</a>
+        <a onclick="showPage('contact')" class="text-gray-500 hover:text-orange-500 cursor-pointer">Холбоо барих</a>
+      </div>
+    </div>
+    <div class="mstrip rounded mb-4" style="opacity:0.4"></div>
+    <p class="text-xs text-gray-400 text-center">© 2026 Монгол Гэрийн Хээний Дижитал Сан</p>
+  </div>
+</footer>
+
+<script>
+const SURL = 'https://dkaevjrbnmfxaphqcpwc.supabase.co';
+// NOTE: Run this in Supabase SQL editor to add attach_url column:
+// ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS attach_url text;
+const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRrYWV2anJibm1meGFwaHFjcHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MzQwNjMsImV4cCI6MjA5MTQxMDA2M30.5DdylVEtkCoTeF6iPXboebgeI6bxTWVP7brHTFKKW4E';
+const { createClient } = supabase;
+const sb = createClient(SURL, SKEY);
+
+let CU = null;
+let POSTS = [];
+let UFILE = null;
+let AVFILE = null;
+
+// AUTH STATE
+sb.auth.onAuthStateChange(async (event, session) => {
+  CU = session?.user || null;
+  if (CU) {
+    document.getElementById('nav-auth').style.display = 'none';
+    document.getElementById('nav-user').style.display = 'flex';
+    try {
+      const { data: prof } = await sb.from('profiles').select('*').eq('id', CU.id).single();
+      const name = prof?.display_name || CU.email.split('@')[0];
+      document.getElementById('nav-uname').textContent = name;
+      document.getElementById('nav-av').textContent = name.charAt(0).toUpperCase();
+      if (prof?.photo_url) document.getElementById('nav-av').innerHTML = `<img src="${prof.photo_url}" class="w-full h-full object-cover rounded-full"/>`;
+      document.getElementById('prof-name').textContent = name;
+      document.getElementById('prof-email').textContent = CU.email;
+      document.getElementById('prof-av').textContent = name.charAt(0).toUpperCase();
+      if (prof?.photo_url) document.getElementById('prof-av').innerHTML = `<img src="${prof.photo_url}" class="w-full h-full object-cover rounded-full"/>`;
+      document.getElementById('prof-bio').textContent = prof?.bio || 'Тайлбар байхгүй';
+      document.getElementById('edit-name').value = prof?.display_name || name;
+      document.getElementById('edit-bio').value = prof?.bio || '';
+      if (prof?.photo_url) document.getElementById('edit-av-prev').innerHTML = `<img src="${prof.photo_url}" class="w-full h-full object-cover rounded-full"/><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);opacity:0;transition:opacity 0.2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span class="material-symbols-outlined text-white text-xl">photo_camera</span></div>`;
+    } catch(e) {
+      console.log('Profile load error:', e);
+      document.getElementById('nav-uname').textContent = CU.email.split('@')[0];
+      document.getElementById('nav-av').textContent = CU.email.charAt(0).toUpperCase();
+    }
+  } else {
+    document.getElementById('nav-auth').style.display = 'flex';
+    document.getElementById('nav-user').style.display = 'none';
+  }
+  loadPosts();
+});
+
+window.doRegister = async function() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pw = document.getElementById('reg-pw').value;
+  const pw2 = document.getElementById('reg-pw2').value;
+  const err = document.getElementById('reg-err');
+  const btn = document.getElementById('reg-btn');
+  err.textContent = '';
+  if (!name || !email || !pw || !pw2) { err.textContent = '⚠️ Бүх талбарыг бөглөнэ үү!'; return; }
+  if (pw !== pw2) { err.textContent = '⚠️ Нууц үг таарахгүй байна!'; return; }
+  if (pw.length < 6) { err.textContent = '⚠️ Нууц үг 6+ тэмдэгт байх ёстой!'; return; }
+  btn.textContent = 'Түр хүлээнэ үү...'; btn.disabled = true;
+  try {
+    const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { display_name: name } } });
+    if (error) {
+      if (error.message.includes('already')) err.textContent = '⚠️ Энэ и-мэйл аль хэдийн бүртгэлтэй!';
+      else err.textContent = '⚠️ ' + error.message;
+      btn.innerHTML = '<span>Бүртгүүлэх</span><span class="material-symbols-outlined text-lg">arrow_forward</span>'; btn.disabled = false;
+      return;
+    }
+    if (data.user) {
+      try {
+        await sb.from('profiles').upsert({ id: data.user.id, display_name: name, email: email, bio: '', photo_url: '' });
+      } catch(e) { console.log('Profile create skipped:', e); }
+    }
+    closeModal('register');
+    toast('Бүртгэл амжилттай үүслээ! 🎉');
+    ['reg-name','reg-email','reg-pw','reg-pw2'].forEach(id => document.getElementById(id).value = '');
+  } catch(e) {
+    err.textContent = '⚠️ Алдаа гарлаа: ' + e.message;
+  }
+  btn.innerHTML = '<span>Бүртгүүлэх</span><span class="material-symbols-outlined text-lg">arrow_forward</span>'; btn.disabled = false;
+};
+
+window.doLogin = async function() {
+  const email = document.getElementById('log-email').value.trim();
+  const pw = document.getElementById('log-pw').value;
+  const err = document.getElementById('log-err');
+  const btn = document.getElementById('log-btn');
+  err.textContent = '';
+  if (!email || !pw) { err.textContent = '⚠️ И-мэйл болон нууц үгээ оруулна уу!'; return; }
+  btn.textContent = 'Түр хүлээнэ үү...'; btn.disabled = true;
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+    if (error) {
+      if (error.message.includes('Invalid login')) err.textContent = '⚠️ И-мэйл эсвэл нууц үг буруу!';
+      else if (error.message.includes('Email not confirmed')) err.textContent = '⚠️ И-мэйлээ баталгаажуулна уу! Ирсэн мэйлээ шалгаарай.';
+      else err.textContent = '⚠️ Алдаа: ' + error.message;
+      btn.innerHTML = '<span>Нэвтрэх</span><span class="material-symbols-outlined text-lg">arrow_forward</span>'; btn.disabled = false;
+      return;
+    }
+    closeModal('login');
+    toast('Амжилттай нэвтэрлээ! 👋');
+    document.getElementById('log-email').value = '';
+    document.getElementById('log-pw').value = '';
+  btn.textContent = 'Нэвтрэх'; btn.disabled = false;
+};
+
+window.doLogout = async function() {
+  await sb.auth.signOut();
+  toast('Амжилттай гарлаа!');
+  showPage('home');
+};
+
+window.saveProfile = async function() {
+  if (!CU) { toast('⚠️ Нэвтэрч орно уу!'); return; }
+  const name = document.getElementById('edit-name').value.trim();
+  const bio = document.getElementById('edit-bio').value.trim();
+  const btn = document.getElementById('save-prof-btn');
+  btn.textContent = 'Хадгалж байна...'; btn.disabled = true;
+  let photoUrl = '';
+  if (AVFILE) {
+    const reader = new FileReader();
+    photoUrl = await new Promise(res => { reader.onload = e => res(e.target.result); reader.readAsDataURL(AVFILE); });
+  }
+  const upd = { id: CU.id, display_name: name, bio: bio, email: CU.email };
+  if (photoUrl) upd.photo_url = photoUrl;
+  await sb.from('profiles').upsert(upd);
+  document.getElementById('prof-name').textContent = name;
+  document.getElementById('prof-bio').textContent = bio || 'Тайлбар байхгүй';
+  document.getElementById('nav-uname').textContent = name;
+  document.getElementById('nav-av').textContent = name.charAt(0).toUpperCase();
+  if (photoUrl) {
+    document.getElementById('prof-av').innerHTML = `<img src="${photoUrl}" class="w-full h-full object-cover rounded-full"/>`;
+    document.getElementById('nav-av').innerHTML = `<img src="${photoUrl}" class="w-full h-full object-cover rounded-full"/>`;
+  }
+  closeModal('editProfile');
+  toast('Профайл хадгалагдлаа! ✅');
+  AVFILE = null;
+  btn.innerHTML = '<span class="material-symbols-outlined">save</span>Хадгалах'; btn.disabled = false;
+};
+
+window.doPublish = async function() {
+  if (!CU) { toast('⚠️ Эхлээд нэвтэрнэ үү!'); openModal('login'); return; }
+  const title = document.getElementById('pub-title').value.trim();
+  const cat = document.getElementById('pub-cat').value;
+  const ptype = document.querySelector('input[name="ptype"]:checked').value;
+  const desc = document.getElementById('pub-desc').value.trim();
+  const btn = document.getElementById('pub-btn');
+  if (!title || !desc) { toast('⚠️ Гарчиг болон тайлбарыг бөглөнэ үү!'); return; }
+  btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>Нийтэлж байна...'; btn.disabled = true;
+  let fileUrl = '';
+  let attachUrl = '';
+  if (UIMG) {
+    const reader = new FileReader();
+    fileUrl = await new Promise(res => { reader.onload = e => res(e.target.result); reader.readAsDataURL(UIMG); });
+  }
+  if (UFILE2) {
+    const reader2 = new FileReader();
+    attachUrl = await new Promise(res => { reader2.onload = e => res(e.target.result); reader2.readAsDataURL(UFILE2); });
+  }
+  const { data: prof } = await sb.from('profiles').select('*').eq('id', CU.id).single();
+  const { error } = await sb.from('posts').insert({
+    title, category: cat, post_type: ptype, description: desc, 
+    file_url: fileUrl, attach_url: attachUrl,
+    author_id: CU.id,
+    author_name: prof?.display_name || CU.email.split('@')[0],
+    author_photo: prof?.photo_url || ''
+  });
+  if (error) { toast('⚠️ Алдаа: ' + error.message); }
+  else {
+    toast('Бүтээл нийтлэгдлээ! 🎉');
+    document.getElementById('pub-title').value = '';
+    document.getElementById('pub-desc').value = '';
+    document.getElementById('pub-img-preview').innerHTML = '';
+    document.getElementById('pub-file-preview').innerHTML = '';
+    UFILE = null; UIMG = null; UFILE2 = null;
+    await loadPosts();
+    showPage('gallery');
+  }
+  btn.innerHTML = '<span class="material-symbols-outlined">publish</span>Нийтлэх'; btn.disabled = false;
+};
+
+async function loadPosts() {
+  try {
+    const { data, error } = await sb.from('posts').select('*').order('created_at', { ascending: false });
+    if (!error && data) {
+      try {
+        const { data: likes } = await sb.from('likes').select('post_id');
+        if (likes) {
+          const lc = {};
+          likes.forEach(l => { lc[l.post_id] = (lc[l.post_id] || 0) + 1; });
+          data.forEach(p => { p.like_count = lc[p.id] || 0; });
+        }
+      } catch(e) { console.log('likes table not ready yet'); }
+      POSTS = data;
+      document.getElementById('stat-posts').textContent = POSTS.length;
+      renderGallery('');
+      renderMyPosts();
+    }
+  } catch(e) { console.error('loadPosts error:', e); }
+}
+
+function cardHtml(p) {
+  return `<div class="hee-card bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm cursor-pointer" onclick="openDetail('${p.id}')">
+    <div class="aspect-square bg-gray-50 overflow-hidden flex items-center justify-center relative">
+      ${p.file_url ? `<img src="${p.file_url}" class="w-full h-full object-cover"/>` : `<div class="w-full h-full flex items-center justify-center" style="background:#FFF0E8"><span class="material-symbols-outlined text-5xl" style="color:#FF6B1A">image</span></div>`}
+      <div style="position:absolute;top:0.5rem;right:0.5rem"><span class="text-xs font-semibold px-2 py-1 rounded-full text-white" style="background:#FF6B1A">${p.post_type === 'hee' ? 'ХЭЭ' : 'БҮТЭЭЛ'}</span></div>
+    </div>
+    <div class="p-4">
+      <div class="flex items-start justify-between mb-2">
+        <div style="font-family:'Noto Serif',serif;font-size:0.875rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${p.title}</div>
+        <span class="text-xs font-semibold bg-orange-50 px-2 py-0.5 rounded-full ml-1 flex-shrink-0" style="color:#FF6B1A">${p.category || 'БУСАД'}</span>
+      </div>
+      <p class="text-xs text-gray-500 mb-3" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.description}</p>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background:#FF6B1A">${(p.author_name || '?').charAt(0).toUpperCase()}</div>
+          <span class="text-xs text-gray-500" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.author_name || 'Хэрэглэгч'}</span>
+        </div>
+        <div class="flex gap-1 items-center">
+          <span class="like-btn" style="pointer-events:none"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;color:#FF6B1A">favorite</span><span class="text-xs text-gray-400">${p.like_count || 0}</span></span>
+          ${p.file_url ? '<span title="Зураг байна" style="color:#FF6B1A"><span class="material-symbols-outlined text-sm">image</span></span>' : ''}
+          ${p.attach_url ? '<span title="Файл байна" style="color:#1a3a6b"><span class="material-symbols-outlined text-sm">attach_file</span></span>' : ''}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderGallery(cat) {
+  const grid = document.getElementById('gallery-grid');
+  if (!grid) return;
+  const list = cat ? POSTS.filter(p => p.category === cat) : POSTS;
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="col-span-3 text-center py-16 text-gray-400"><span class="material-symbols-outlined text-5xl block mb-3">inbox</span><p>Одоогоор нийтлэл байхгүй байна</p><button onclick="showPage('publish')" class="ob mt-4 px-5 py-2 rounded-xl text-sm font-medium">Нийтлэх</button></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(cardHtml).join('');
+}
+
+function renderMyPosts() {
+  const grid = document.getElementById('my-grid');
+  if (!grid || !CU) return;
+  const mine = POSTS.filter(p => p.author_id === CU.id);
+  document.getElementById('prof-count').textContent = mine.length;
+  if (mine.length === 0) {
+    grid.innerHTML = `<div class="col-span-3 text-center py-10 text-gray-400"><span class="material-symbols-outlined text-4xl block mb-2">add_circle</span><p class="text-sm">Та одоогоор бүтээл нийтлээгүй байна</p><button onclick="showPage('publish')" class="ob mt-3 px-4 py-2 rounded-lg text-sm font-medium">Нийтлэх</button></div>`;
+    return;
+  }
+  grid.innerHTML = mine.map(p => `<div class="hee-card bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm cursor-pointer" onclick="openDetail('${p.id}')">
+    <div class="aspect-square bg-gray-50 flex items-center justify-center overflow-hidden">
+      ${p.file_url ? `<img src="${p.file_url}" class="w-full h-full object-cover"/>` : `<div class="w-full h-full flex items-center justify-center bg-orange-50"><span class="material-symbols-outlined text-4xl" style="color:#FF6B1A">image</span></div>`}
+    </div>
+    <div class="p-3">
+      <div style="font-family:'Noto Serif',serif;font-size:0.75rem;font-weight:700;margin-bottom:0.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.title}</div>
+      <span class="text-xs px-2 py-0.5 rounded-full text-white" style="background:#FF6B1A">${p.post_type === 'hee' ? 'ХЭЭ' : 'БҮТЭЭЛ'}</span>
+    </div>
+  </div>`).join('');
+}
+
+window.openDetail = function(id) {
+  const p = POSTS.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('det-title').textContent = p.title;
+  document.getElementById('det-cat').textContent = p.category || 'БУСАД';
+  document.getElementById('det-type').textContent = p.post_type === 'hee' ? 'ХЭЭ' : 'БҮТЭЭЛ';
+  document.getElementById('det-desc').textContent = p.description;
+  document.getElementById('det-author').textContent = p.author_name || 'Хэрэглэгч';
+  document.getElementById('det-av').textContent = (p.author_name || '?').charAt(0).toUpperCase();
+  const img = document.getElementById('det-img');
+  if (p.file_url) { img.src = p.file_url; img.style.display = 'block'; } else { img.style.display = 'none'; }
+  const btns = document.getElementById('det-download-btns');
+  let btnHtml = '';
+  if (p.file_url) {
+    btnHtml += `<a href="${p.file_url}" download="${p.title}.jpg" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style="background:#FF6B1A;text-decoration:none"><span class="material-symbols-outlined text-sm">download</span>Зураг татах</a>`;
+  }
+  if (p.attach_url) {
+    btnHtml += `<a href="${p.attach_url}" download="${p.title}_file" class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold border" style="color:#FF6B1A;border-color:#FF6B1A;text-decoration:none"><span class="material-symbols-outlined text-sm">folder_open</span>Файл татах</a>`;
+  }
+  btns.innerHTML = btnHtml;
+  CURRENT_POST_ID = id;
+  loadLikesForPost(id);
+  loadCommentsForPost(id);
+  if(document.getElementById('comment-input')) document.getElementById('comment-input').value = '';
+  openModal('detail');
+};
+
+window.doContact = async function() {
+  if (!CU) { toast('⚠️ Эхлээд нэвтэрнэ үү!'); openModal('login'); return; }
+  const subj = document.getElementById('con-subj').value.trim();
+  const msg = document.getElementById('con-msg').value.trim();
+  const btn = document.getElementById('con-btn');
+  if (!subj || !msg) { toast('⚠️ Бүх талбарыг бөглөнэ үү!'); return; }
+  btn.textContent = 'Илгээж байна...'; btn.disabled = true;
+  const { error } = await sb.from('contacts').insert({ subject: subj, message: msg, sender_email: CU.email, sender_name: CU.email.split('@')[0] });
+  if (!error) { toast('Мессеж илгээгдлээ! ✅'); document.getElementById('con-subj').value = ''; document.getElementById('con-msg').value = ''; }
+  else toast('⚠️ Алдаа гарлаа');
+  btn.innerHTML = '<span class="material-symbols-outlined">send</span>Илгээх'; btn.disabled = false;
+};
+
+window.filterCat = function(el, cat) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  if (typeof renderGallery === 'function') renderGallery(cat);
+};
+
+window.doSearch = function() {
+  const q = (document.getElementById('search-gallery').value || document.getElementById('search-nav').value).trim().toLowerCase();
+  if (!q) { renderGallery(''); return; }
+  const res = POSTS.filter(p => p.title.toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q) || (p.category || '').toLowerCase().includes(q) || (p.author_name || '').toLowerCase().includes(q));
+  const grid = document.getElementById('gallery-grid');
+  if (!grid) return;
+  if (res.length === 0) { grid.innerHTML = `<div class="col-span-3 text-center py-12 text-gray-400"><span class="material-symbols-outlined text-4xl block mb-2">search_off</span><p>"${q}" хайлтаар илэрц олдсонгүй</p></div>`; return; }
+  grid.innerHTML = res.map(cardHtml).join('');
+};
+
+let UIMG = null;
+let UFILE2 = null;
+
+window.handleFile = function(input, type) {
+  const f = input.files[0]; if (!f) return;
+  const reader = new FileReader();
+  if (type === 'image') {
+    UIMG = f;
+    reader.onload = e => {
+      document.getElementById('pub-img-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-40 object-cover rounded-xl"/>`;
+    };
+  } else {
+    UFILE2 = f;
+    UFILE = f;
+    reader.onload = e => {
+      document.getElementById('pub-file-preview').innerHTML = `<div class="flex items-center gap-2 p-3 bg-orange-50 rounded-xl"><span class="material-symbols-outlined" style="color:#FF6B1A">insert_drive_file</span><span class="text-sm text-gray-600">${f.name}</span><span class="text-xs text-gray-400 ml-auto">${(f.size/1024).toFixed(1)}KB</span></div>`;
+    };
+  }
+  reader.readAsDataURL(f);
+};
+
+window.handleAvatar = function(input) {
+  const f = input.files[0]; if (!f) return;
+  AVFILE = f;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('edit-av-prev').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-full"/><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);opacity:0;transition:opacity 0.2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0"><span class="material-symbols-outlined text-white text-xl">photo_camera</span></div>`;
+  };
+  reader.readAsDataURL(f);
+};
+
+window.showPage = function(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  window.scrollTo(0, 0);
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const m = { home: 0, gallery: 1, profile: 2, publish: 3, contact: 4 };
+  const ls = document.querySelectorAll('.nav-link');
+  if (m[id] !== undefined && ls[m[id]]) ls[m[id]].classList.add('active');
+  if (id === 'gallery') { if (typeof loadPosts === 'function') loadPosts(); }
+  if (id === 'profile') { if (typeof renderMyPosts === 'function') renderMyPosts(); }
+};
+
+function openModal(id) { document.getElementById('modal-' + id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById('modal-' + id).classList.remove('open'); document.body.style.overflow = ''; }
+function switchModal(f, t) { closeModal(f); setTimeout(() => openModal(t), 200); }
+
+// ============ LIKE & COMMENT SYSTEM ============
+let CURRENT_POST_ID = null;
+
+window.toggleLike = async function() {
+  if (!CU) { toast('⚠️ Эхлээд нэвтэрнэ үү!'); openModal('login'); return; }
+  if (!CURRENT_POST_ID) return;
+  const btn = document.getElementById('det-like-btn');
+  const countEl = document.getElementById('det-like-count');
+  const { data: existing } = await sb.from('likes').select('id').eq('post_id', CURRENT_POST_ID).eq('user_id', CU.id).single();
+  if (existing) {
+    await sb.from('likes').delete().eq('post_id', CURRENT_POST_ID).eq('user_id', CU.id);
+    btn.classList.remove('liked');
+    countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
+  } else {
+    await sb.from('likes').insert({ post_id: CURRENT_POST_ID, user_id: CU.id });
+    btn.classList.add('liked', 'pop');
+    countEl.textContent = parseInt(countEl.textContent) + 1;
+    setTimeout(() => btn.classList.remove('pop'), 500);
+  }
+  await loadPosts();
+};
+
+async function loadLikesForPost(postId) {
+  try {
+    const { count } = await sb.from('likes').select('*', { count: 'exact', head: true }).eq('post_id', postId);
+    document.getElementById('det-like-count').textContent = count || 0;
+    const btn = document.getElementById('det-like-btn');
+    btn.classList.remove('liked');
+    if (CU) {
+      const { data: myLike } = await sb.from('likes').select('id').eq('post_id', postId).eq('user_id', CU.id).single();
+      if (myLike) btn.classList.add('liked');
+    }
+  } catch(e) {
+    document.getElementById('det-like-count').textContent = '0';
+    console.log('likes not available yet');
+  }
+}
+
+window.postComment = async function() {
+  if (!CU) { toast('⚠️ Эхлээд нэвтэрнэ үү!'); openModal('login'); return; }
+  if (!CURRENT_POST_ID) return;
+  const input = document.getElementById('comment-input');
+  const text = input.value.trim();
+  if (!text) { toast('⚠️ Сэтгэгдэл бичнэ үү!'); return; }
+  const { data: prof } = await sb.from('profiles').select('*').eq('id', CU.id).single();
+  const { error } = await sb.from('comments').insert({
+    post_id: CURRENT_POST_ID, user_id: CU.id,
+    author_name: prof?.display_name || CU.email.split('@')[0],
+    author_photo: prof?.photo_url || '', content: text
+  });
+  if (error) { toast('⚠️ Алдаа: ' + error.message); return; }
+  input.value = '';
+  toast('Сэтгэгдэл нэмэгдлээ! 💬');
+  loadCommentsForPost(CURRENT_POST_ID);
+};
+
+async function loadCommentsForPost(postId) {
+  try {
+    const { data: comments } = await sb.from('comments').select('*').eq('post_id', postId).order('created_at', { ascending: true });
+    const container = document.getElementById('det-comments');
+    const countEl = document.getElementById('det-comment-count');
+    if (!comments || comments.length === 0) {
+      container.innerHTML = '<p class="text-xs text-gray-400 italic py-3">Сэтгэгдэл байхгүй байна</p>';
+      countEl.textContent = '0'; return;
+    }
+    countEl.textContent = comments.length;
+    container.innerHTML = comments.map(c => {
+      const init = (c.author_name||'?').charAt(0).toUpperCase();
+      const d = new Date(c.created_at), now = new Date(), diff = Math.floor((now-d)/1000);
+      const ago = diff<60?'Саяхан':diff<3600?Math.floor(diff/60)+' мин':diff<86400?Math.floor(diff/3600)+' цаг':Math.floor(diff/86400)+' өдөр';
+      const esc = (s) => { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; };
+      return '<div class="comment-item"><div class="flex items-start gap-2"><div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5" style="background:#FF6B1A">'+init+'</div><div class="flex-1"><div class="flex items-center gap-2 mb-0.5"><span class="text-xs font-semibold text-gray-800">'+(c.author_name||'Хэрэглэгч')+'</span><span class="text-xs text-gray-400">'+ago+'</span></div><p class="text-sm text-gray-600">'+esc(c.content)+'</p></div></div></div>';
+    }).join('');
+    container.scrollTop = container.scrollHeight;
+  } catch(e) {
+    document.getElementById('det-comments').innerHTML = '<p class="text-xs text-gray-400 italic py-3">Сэтгэгдэл байхгүй байна</p>';
+    document.getElementById('det-comment-count').textContent = '0';
+    console.log('comments not available yet');
+  }
+}
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = 
