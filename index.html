@@ -859,10 +859,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
   </div>
 </div>
 
-<\!-- GALLERY -->
+<!-- GALLERY -->
 <div id="page-gallery" class="page pt-16 min-h-screen" style="background:#FAFAF8">
   <div class="max-w-screen-xl mx-auto px-4 py-8">
-    <\!-- Header -->
+    <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
         <h1 style="font-family:'Noto Serif',serif;font-size:1.8rem;font-weight:900;color:#FF6B1A">Хээний Сан</h1>
@@ -881,24 +881,24 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
         </select>
       </div>
     </div>
-    <\!-- Stats bar -->
+    <!-- Stats bar -->
     <div class="flex items-center gap-4 mb-6 text-xs text-gray-500">
       <span>Нийт: <strong id="stat-posts" class="text-orange-500">0</strong> хээ</span>
     </div>
-    <\!-- Empty state -->
+    <!-- Empty state -->
     <div id="gallery-empty" class="text-center py-20 hidden">
       <span class="material-symbols-outlined text-5xl mb-4 block" style="color:#FFD0A0">image_search</span>
       <p class="text-gray-400 text-sm">Хайлтад тохирох хээ олдсонгүй</p>
     </div>
-    <\!-- Grid -->
+    <!-- Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="gallery-grid"></div>
   </div>
 </div>
 
-<\!-- PROFILE -->
+<!-- PROFILE -->
 <div id="page-profile" class="page pt-16 min-h-screen" style="background:#FFF8F5">
   <div class="max-w-2xl mx-auto px-6 py-10">
-    <\!-- Not logged in state -->
+    <!-- Not logged in state -->
     <div id="prof-noauth" class="text-center py-20">
       <span class="material-symbols-outlined text-5xl mb-4 block" style="color:#FFB080">account_circle</span>
       <h2 style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A;margin-bottom:0.5rem">Нэвтэрч орно уу</h2>
@@ -908,7 +908,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
         <button onclick="openModal('register')" class="bg-white border-2 border-orange-400 text-orange-500 px-6 py-2.5 rounded-xl font-semibold text-sm">Бүртгүүлэх</button>
       </div>
     </div>
-    <\!-- Logged in state -->
+    <!-- Logged in state -->
     <div id="prof-auth" style="display:none">
       <div class="bg-white rounded-2xl border border-orange-100 shadow-sm p-8 mb-6">
         <div class="flex items-center gap-5 mb-6">
@@ -922,7 +922,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
         <button onclick="toggleEdit()" class="text-xs font-semibold px-4 py-2 rounded-full border border-orange-200 text-orange-500 hover:bg-orange-50">Профайл засах</button>
         <button onclick="doLogout()" class="text-xs font-semibold px-4 py-2 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 ml-2">Гарах</button>
       </div>
-      <\!-- Edit form (hidden by default) -->
+      <!-- Edit form (hidden by default) -->
       <div id="prof-edit-form" class="bg-white rounded-2xl border border-orange-100 shadow-sm p-8 mb-6 hidden">
         <h3 class="font-bold text-base mb-4" style="color:#FF6B1A">Профайл засах</h3>
         <div class="space-y-4">
@@ -947,7 +947,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
           </div>
         </div>
       </div>
-      <\!-- My posts -->
+      <!-- My posts -->
       <div class="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
         <h3 class="font-bold text-base mb-4" style="font-family:'Noto Serif',serif;color:#FF6B1A">Миний нийтлэлүүд</h3>
         <div id="my-posts-grid" class="grid grid-cols-2 gap-3"></div>
@@ -957,10 +957,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
   </div>
 </div>
 
-<\!-- PUBLISH -->
+<!-- PUBLISH -->
 <div id="page-publish" class="page pt-16 min-h-screen" style="background:#FFF8F5">
   <div class="max-w-3xl mx-auto px-6 py-10">
-    <\!-- Auth check -->
+    <!-- Auth check -->
     <div id="pub-noauth" class="text-center py-20">
       <span class="material-symbols-outlined text-5xl mb-4 block" style="color:#FFB080">lock</span>
       <h2 style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:900;color:#FF6B1A;margin-bottom:0.5rem">Нэвтэрч орно уу</h2>
@@ -1020,7 +1020,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
   </div>
 </div>
 
-<\!-- CONTACT -->
+<!-- CONTACT -->
 <div id="page-contact" class="page pt-16 min-h-screen" style="background:#FFF8F5">
   <div class="max-w-2xl mx-auto px-6 py-12">
     <div class="text-center mb-8">
@@ -1043,7 +1043,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
   </div>
 </div>
 
-<\!-- REGISTER MODAL -->
+<!-- REGISTER MODAL -->
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" id="modal-register" onclick="if(event.target===this)closeModal('register')">
   <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl mx-4 relative" style="border-top:4px solid #FF6B1A">
     <div class="p-8">
@@ -1082,7 +1082,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
   </div>
 </div>
 
-<\!-- LOGIN MODAL -->
+<!-- LOGIN MODAL -->
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" id="modal-login" onclick="if(event.target===this)closeModal('login')">
   <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl mx-4 relative" style="border-top:4px solid #FF6B1A">
     <div class="p-8">
@@ -1113,20 +1113,20 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B1A!import
   </div>
 </div>
 
-<\!-- DETAIL MODAL -->
+<!-- DETAIL MODAL -->
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden" id="modal-detail" onclick="if(event.target===this)closeModal('detail')">
   <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl mx-4 relative overflow-hidden max-h-screen overflow-y-auto">
     <div id="detail-content" class="p-0">
-      <\!-- Filled by JS -->
+      <!-- Filled by JS -->
     </div>
     <button onclick="closeModal('detail')" class="absolute top-4 right-4 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow text-gray-500 hover:text-gray-700 z-10"><span class="material-symbols-outlined text-base">close</span></button>
   </div>
 </div>
 
-<\!-- TOAST -->
+<!-- TOAST -->
 <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm font-medium px-5 py-3 rounded-xl shadow-xl opacity-0 pointer-events-none transition-opacity z-50" style="transition:opacity 0.3s"></div>
 
-<\!-- FOOTER -->
+<!-- FOOTER -->
 <footer class="py-8 text-center mt-10 border-t border-orange-100">
   <div class="max-w-4xl mx-auto px-6">
     <div class="flex items-center justify-center gap-6 mb-4 flex-wrap">
@@ -1206,7 +1206,7 @@ function closeModal(name) {
 // ── TOAST ────────────────────────────────────────────────────────
 function toast(msg) {
   const t = document.getElementById('toast');
-  if (\!t) return;
+  if (!t) return;
   t.textContent = msg;
   t.style.opacity = '1';
   setTimeout(() => { t.style.opacity = '0'; }, 2800);
@@ -1265,14 +1265,14 @@ window.doRegister = async function() {
   const err = document.getElementById('reg-err');
   const btn = document.getElementById('reg-btn');
   err.textContent = '';
-  if (\!name || \!email || \!pw || \!pw2) { err.textContent = '⚠️ Бүх талбарыг бөглөнө үү\!'; return; }
-  if (pw \!== pw2) { err.textContent = '⚠️ Нууц үг таарахгүй байна\!'; return; }
-  if (pw.length < 6) { err.textContent = '⚠️ Нууц үг 6+ тэмдэгт байх ёстой\!'; return; }
+  if (!name || !email || !pw || !pw2) { err.textContent = '⚠️ Бүх талбарыг бөглөнө үү!'; return; }
+  if (pw !== pw2) { err.textContent = '⚠️ Нууц үг таарахгүй байна!'; return; }
+  if (pw.length < 6) { err.textContent = '⚠️ Нууц үг 6+ тэмдэгт байх ёстой!'; return; }
   btn.textContent = 'Түр хүлээнэ үү...'; btn.disabled = true;
   try {
     const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { display_name: name } } });
     if (error) {
-      err.textContent = error.message.includes('already') ? '⚠️ Энэ и-мэйл аль хэдийн бүртгэлтэй\!' : '⚠️ ' + error.message;
+      err.textContent = error.message.includes('already') ? '⚠️ Энэ и-мэйл аль хэдийн бүртгэлтэй!' : '⚠️ ' + error.message;
       btn.innerHTML = '<span>Бүртгүүлэх</span><span class="material-symbols-outlined text-lg">arrow_forward</span>'; btn.disabled = false;
       return;
     }
@@ -1280,7 +1280,7 @@ window.doRegister = async function() {
       try { await sb.from('profiles').upsert({ id: data.user.id, display_name: name, email, bio: '', photo_url: '' }); } catch(e) {}
     }
     closeModal('register');
-    toast('Бүртгэл амжилттай үүслээ\! 🎉');
+    toast('Бүртгэл амжилттай үүслээ! 🎉');
     ['reg-name','reg-email','reg-pw','reg-pw2'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   } catch(e) {
     err.textContent = '⚠️ Алдаа гарлаа: ' + e.message;
@@ -1295,17 +1295,17 @@ window.doLogin = async function() {
   const err = document.getElementById('log-err');
   const btn = document.getElementById('log-btn');
   err.textContent = '';
-  if (\!email || \!pw) { err.textContent = '⚠️ И-мэйл болон нууц үгийг оруулна уу\!'; return; }
+  if (!email || !pw) { err.textContent = '⚠️ И-мэйл болон нууц үгийг оруулна уу!'; return; }
   btn.textContent = 'Нэвтэрч байна...'; btn.disabled = true;
   try {
     const { error } = await sb.auth.signInWithPassword({ email, password: pw });
     if (error) {
-      err.textContent = '⚠️ И-мэйл эсвэл нууц үг буруу байна\!';
+      err.textContent = '⚠️ И-мэйл эсвэл нууц үг буруу байна!';
       btn.innerHTML = '<span>Нэвтрэх</span><span class="material-symbols-outlined text-lg">arrow_forward</span>'; btn.disabled = false;
       return;
     }
     closeModal('login');
-    toast('Тавтай морилно уу\! 👋');
+    toast('Тавтай морилно уу! 👋');
     ['log-email','log-pw'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   } catch(e) {
     err.textContent = '⚠️ Алдаа гарлаа: ' + e.message;
@@ -1325,7 +1325,7 @@ window.doLogout = async function() {
 async function loadPosts() {
   try {
     const { data, error } = await sb.from('posts').select('*').order('created_at', { ascending: false });
-    let posts = (\!error && data && data.length > 0) ? data : FALLBACK_POSTS;
+    let posts = (!error && data && data.length > 0) ? data : FALLBACK_POSTS;
     try {
       const { data: likes } = await sb.from('likes').select('post_id');
       if (likes) {
@@ -1381,12 +1381,12 @@ function cardHtml(p) {
 function renderGallery(filter) {
   const grid = document.getElementById('gallery-grid');
   const empty = document.getElementById('gallery-empty');
-  if (\!grid) return;
+  if (!grid) return;
   const catVal = document.getElementById('cat-filter')?.value || '';
   const q = (filter || '').toLowerCase().trim();
   const filtered = POSTS.filter(p => {
-    const matchText = \!q || (p.title||'').toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q) || (p.author_name||'').toLowerCase().includes(q);
-    const matchCat = \!catVal || p.category === catVal;
+    const matchText = !q || (p.title||'').toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q) || (p.author_name||'').toLowerCase().includes(q);
+    const matchCat = !catVal || p.category === catVal;
     return matchText && matchCat;
   });
   if (filtered.length === 0) {
@@ -1402,8 +1402,8 @@ function renderGallery(filter) {
 function renderMyPosts() {
   const grid = document.getElementById('my-posts-grid');
   const empty = document.getElementById('my-posts-empty');
-  if (\!grid) return;
-  if (\!CU) { grid.innerHTML = ''; return; }
+  if (!grid) return;
+  if (!CU) { grid.innerHTML = ''; return; }
   const mine = POSTS.filter(p => p.user_id === CU.id);
   if (mine.length === 0) {
     grid.innerHTML = '';
@@ -1423,7 +1423,7 @@ window.doSearch = function() {
 // ── HANDLE FILE ──────────────────────────────────────────────────
 window.handleFile = function(input, type) {
   const file = input.files[0];
-  if (\!file) return;
+  if (!file) return;
   if (type === 'image') {
     UFILE = file;
     const prev = document.getElementById('pub-img-preview');
@@ -1452,13 +1452,13 @@ window.handleFile = function(input, type) {
 
 // ── PUBLISH ──────────────────────────────────────────────────────
 window.doPublish = async function() {
-  if (\!CU) { openModal('login'); return; }
+  if (!CU) { openModal('login'); return; }
   const title = document.getElementById('pub-title').value.trim();
   const cat = document.getElementById('pub-cat').value;
   const desc = document.getElementById('pub-desc').value.trim();
   const ptype = document.querySelector('input[name="ptype"]:checked')?.value || 'hee';
   const btn = document.getElementById('pub-btn');
-  if (\!title) { toast('⚠️ Гарчиг оруулна уу'); return; }
+  if (!title) { toast('⚠️ Гарчиг оруулна уу'); return; }
   btn.innerHTML = '<span class="material-symbols-outlined animate-spin">autorenew</span>Нийтэлж байна...'; btn.disabled = true;
   try {
     let file_url = null;
@@ -1466,7 +1466,7 @@ window.doPublish = async function() {
       const ext = UFILE.name.split('.').pop();
       const fname = `${CU.id}_${Date.now()}.${ext}`;
       const { data: up, error: ue } = await sb.storage.from('patterns').upload(fname, UFILE, { upsert: true });
-      if (\!ue) {
+      if (!ue) {
         const { data: pub } = sb.storage.from('patterns').getPublicUrl(fname);
         file_url = pub.publicUrl;
       }
@@ -1483,7 +1483,7 @@ window.doPublish = async function() {
     document.getElementById('pub-desc').value = '';
     document.getElementById('pub-img-preview').innerHTML = '';
     document.getElementById('pub-file-preview').innerHTML = '';
-    toast('Бүтээл амжилттай нийтлэгдлээ\! 🎉');
+    toast('Бүтээл амжилттай нийтлэгдлээ! 🎉');
     await loadPosts();
     showPage('gallery');
   } catch(e) {
@@ -1497,15 +1497,15 @@ window.doContact = async function() {
   const subj = document.getElementById('con-subj').value.trim();
   const msg = document.getElementById('con-msg').value.trim();
   const btn = document.getElementById('con-btn');
-  if (\!subj || \!msg) { toast('⚠️ Бүх талбарыг бөглөнө үү'); return; }
+  if (!subj || !msg) { toast('⚠️ Бүх талбарыг бөглөнө үү'); return; }
   btn.textContent = 'Илгээж байна...'; btn.disabled = true;
   try {
     await sb.from('contact_messages').insert({ subject: subj, message: msg, user_id: CU?.id || null });
     document.getElementById('con-subj').value = '';
     document.getElementById('con-msg').value = '';
-    toast('Мессеж амжилттай илгээгдлээ\! ✉️');
+    toast('Мессеж амжилттай илгээгдлээ! ✉️');
   } catch(e) {
-    toast('Мессеж хүлээн авлаа. Баярлалаа\! ✉️');
+    toast('Мессеж хүлээн авлаа. Баярлалаа! ✉️');
     document.getElementById('con-subj').value = '';
     document.getElementById('con-msg').value = '';
   }
@@ -1515,9 +1515,9 @@ window.doContact = async function() {
 // ── OPEN DETAIL ──────────────────────────────────────────────────
 window.openDetail = function(id) {
   const p = POSTS.find(x => x.id == id);
-  if (\!p) return;
+  if (!p) return;
   const dc = document.getElementById('detail-content');
-  if (\!dc) return;
+  if (!dc) return;
   dc.innerHTML = `
     <div>
       ${p.file_url ? `<img src="${p.file_url}" class="w-full object-cover rounded-t-2xl" style="max-height:320px">` : `<div class="w-full flex items-center justify-center rounded-t-2xl" style="height:200px;background:#FFF0E8"><span class="material-symbols-outlined text-6xl" style="color:#FF6B1A">image</span></div>`}
@@ -1546,7 +1546,7 @@ window.toggleEdit = function() {
 
 // ── SAVE PROFILE ─────────────────────────────────────────────────
 window.saveProfile = async function() {
-  if (\!CU) return;
+  if (!CU) return;
   const name = document.getElementById('edit-name')?.value.trim() || '';
   const bio = document.getElementById('edit-bio')?.value.trim() || '';
   try {
@@ -1555,7 +1555,7 @@ window.saveProfile = async function() {
       const ext = AVFILE.name.split('.').pop();
       const fname = `avatar_${CU.id}.${ext}`;
       const { error: ue } = await sb.storage.from('avatars').upload(fname, AVFILE, { upsert: true });
-      if (\!ue) {
+      if (!ue) {
         const { data: pub } = sb.storage.from('avatars').getPublicUrl(fname);
         photo_url = pub.publicUrl;
       }
