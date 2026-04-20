@@ -265,9 +265,9 @@ blockquote {
       <div id="nav-user" class="items-center gap-2 flex-shrink-0" style="display:none">
         <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('profile')">
           <div id="nav-av" class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold overflow-hidden" style="background:#FF6B1A">У</div>
-          <span class="text-sm font-medium hidden sm:block" id="nav-uname">Хэрэглэгч</span>
+          <span class="text-sm font-medium" id="nav-uname" style="color:#333;font-size:0.82rem">Хэрэглэгч</span>
         </div>
-        <button onclick="doLogout()" class="text-xs text-gray-400 hover:text-orange-500 ml-1"><span class="material-symbols-outlined text-base">logout</span></button>
+        <button onclick="doLogout()" style="background:rgba(255,107,26,0.08);border:1px solid rgba(255,107,26,0.2);color:#FF6B1A;font-size:0.7rem;font-weight:600;padding:4px 10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:4px;margin-left:4px;transition:all 0.2s" onmouseover="this.style.background='rgba(255,107,26,0.18)'" onmouseout="this.style.background='rgba(255,107,26,0.08)'"><span class="material-symbols-outlined" style="font-size:0.9rem">logout</span>Гарах</button>
       </div>
     </div>
   </div>
@@ -470,148 +470,7 @@ blockquote {
 
   
   <\!-- ===== ХЭЭНИЙ БҮРЭН ЖАГСААЛТ ===== -->
-  <section style="background:linear-gradient(180deg,#2c1206 0%,#1a0a02 100%);padding:5rem 0;position:relative;overflow:hidden">
-    <\!-- Decorative background pattern -->
-    <div style="position:absolute;inset:0;opacity:0.04;background-image:repeating-linear-gradient(45deg,#FF6B1A 0,#FF6B1A 1px,transparent 0,transparent 50%);background-size:20px 20px;pointer-events:none"></div>
-    <div style="max-width:1200px;margin:0 auto;padding:0 2rem;position:relative">
-
-      <\!-- Header -->
-      <div style="text-align:center;margin-bottom:3.5rem">
-        <div style="display:inline-flex;align-items:center;gap:12px;margin-bottom:1rem">
-          <div style="width:40px;height:1px;background:#FF6B1A;opacity:0.7"></div>
-          <span style="color:#FF8C38;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase">Угалз хээний сан</span>
-          <div style="width:40px;height:1px;background:#FF6B1A;opacity:0.7"></div>
-        </div>
-        <h2 style="font-family:'Noto Serif',serif;font-size:2.2rem;font-weight:900;color:white;margin:0 0 0.75rem;text-shadow:0 2px 20px rgba(0,0,0,0.5)">Хээний бүрэн жагсаалт</h2>
-        <p style="color:rgba(255,255,255,0.65);font-size:0.95rem;max-width:580px;margin:0 auto">Монгол гэрийн хээ угалзын 1500+ нэр төрлийг 5 үндсэн бүлгээр ангилсан иж бүрэн сан</p>
-      </div>
-
-      <\!-- 5 Category Cards grid -->
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1.25rem">
-
-        <\!-- 1. Геометрийн -->
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.25);border-radius:16px;padding:1.5rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,107,26,0.12)';this.style.borderColor='rgba(255,107,26,0.6)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,107,26,0.25)'">
-          <div style="text-align:center;margin-bottom:1rem">
-            <div style="font-size:2rem;margin-bottom:0.5rem">📐</div>
-            <h3 style="color:#FF8C38;font-size:0.95rem;font-weight:800;margin:0 0 0.25rem">Геометрийн хээ</h3>
-            <div style="width:30px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
-          </div>
-          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Чагтан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Хас хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Өлзий хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Алхан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Түмэн наст хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Хаан бугуйвч</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Хатан сүйх</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Арга билэг хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Эрхий угалз</li>
-          </ul>
-          <div style="text-align:center;margin-top:0.75rem">
-            <span style="color:#FF6B1A;font-size:0.72rem;font-weight:700">300+ хувилбар</span>
-          </div>
-        </div>
-
-        <\!-- 2. Амьтдын -->
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.25);border-radius:16px;padding:1.5rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,107,26,0.12)';this.style.borderColor='rgba(255,107,26,0.6)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,107,26,0.25)'">
-          <div style="text-align:center;margin-bottom:1rem">
-            <div style="font-size:2rem;margin-bottom:0.5rem">🐉</div>
-            <h3 style="color:#FF8C38;font-size:0.95rem;font-weight:800;margin:0 0 0.25rem">Амьтдын дүрт хээ</h3>
-            <div style="width:30px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
-          </div>
-          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Луу угалз</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Арслан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Барын хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Хангарди хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Эвэр угалз</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Загасан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Шувуун хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Эрвээхэй хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Аргалийн эвэр</li>
-          </ul>
-          <div style="text-align:center;margin-top:0.75rem">
-            <span style="color:#FF6B1A;font-size:0.72rem;font-weight:700">Дөрвөн хүчтэн</span>
-          </div>
-        </div>
-
-        <\!-- 3. Ургамлын -->
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.25);border-radius:16px;padding:1.5rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,107,26,0.12)';this.style.borderColor='rgba(255,107,26,0.6)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,107,26,0.25)'">
-          <div style="text-align:center;margin-bottom:1rem">
-            <div style="font-size:2rem;margin-bottom:0.5rem">🌸</div>
-            <h3 style="color:#FF8C38;font-size:0.95rem;font-weight:800;margin:0 0 0.25rem">Ургамлын дүрст хээ</h3>
-            <div style="width:30px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
-          </div>
-          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Бадам цэцгийн угалз</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Цэцгэн хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Навчин угалз</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Лянхуа хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Замбага цэцэг</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Яргуйн хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Тооноолжин цэцэг</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Башир цэцэг</li>
-          </ul>
-          <div style="text-align:center;margin-top:0.75rem">
-            <span style="color:#FF6B1A;font-size:0.72rem;font-weight:700">Бадам &amp; цэцэг</span>
-          </div>
-        </div>
-
-        <\!-- 4. Байгалийн -->
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.25);border-radius:16px;padding:1.5rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,107,26,0.12)';this.style.borderColor='rgba(255,107,26,0.6)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,107,26,0.25)'">
-          <div style="text-align:center;margin-bottom:1rem">
-            <div style="font-size:2rem;margin-bottom:0.5rem">🔥</div>
-            <h3 style="color:#FF8C38;font-size:0.95rem;font-weight:800;margin:0 0 0.25rem">Байгалийн хээ</h3>
-            <div style="width:30px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
-          </div>
-          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Гал угалз</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Усан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Уулан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Үүлэн хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Хамар угалз</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Солонгон хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Цахилгаан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Салхин хээ</li>
-          </ul>
-          <div style="text-align:center;margin-top:0.75rem">
-            <span style="color:#FF6B1A;font-size:0.72rem;font-weight:700">Гал &amp; ус &amp; уул</span>
-          </div>
-        </div>
-
-        <\!-- 5. Шашны -->
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.25);border-radius:16px;padding:1.5rem;transition:all 0.3s" onmouseover="this.style.background='rgba(255,107,26,0.12)';this.style.borderColor='rgba(255,107,26,0.6)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,107,26,0.25)'">
-          <div style="text-align:center;margin-bottom:1rem">
-            <div style="font-size:2rem;margin-bottom:0.5rem">☸</div>
-            <h3 style="color:#FF8C38;font-size:0.95rem;font-weight:800;margin:0 0 0.25rem">Шашны утгатай хээ</h3>
-            <div style="width:30px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
-          </div>
-          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Хорол хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Чандмань хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Зээ бад хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Нацагдорж</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Жанцан хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Дун хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Шүхэр хээ</li>
-            <li style="color:rgba(255,255,255,0.8);font-size:0.78rem;padding:0.35rem 0.6rem;background:rgba(255,107,26,0.1);border-radius:6px;text-align:center">Найман тахил</li>
-          </ul>
-          <div style="text-align:center;margin-top:0.75rem">
-            <span style="color:#FF6B1A;font-size:0.72rem;font-weight:700">Найман тахил</span>
-          </div>
-        </div>
-
-      </div>
-
-      <\!-- Bottom note -->
-      <div style="text-align:center;margin-top:2.5rem">
-        <p style="color:rgba(255,255,255,0.45);font-size:0.8rem;margin:0">Судалгааны эх сурвалж: Амармэнд, «Монгол гэрийн модны хээний дижитал сан» — 1500+ нэр төрлийн угалз хээ</p>
-      </div>
-
-    </div>
-  </section>
-
-<section style="background:#1a0a02;padding:5rem 0;position:relative;overflow:hidden">
+  <section style="background:#1a0a02;padding:5rem 0;position:relative;overflow:hidden">
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(255,107,26,0.12),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(255,107,26,0.08),transparent 60%);pointer-events:none"></div>
     <div style="max-width:1280px;margin:0 auto;padding:0 2rem;position:relative;z-index:1">
       <div style="text-align:center;margin-bottom:3rem">
@@ -630,7 +489,7 @@ blockquote {
           <h3 style="font-family:'Noto Serif',serif;font-size:0.95rem;font-weight:800;color:white;margin:0 0 0.5rem;text-align:center">Хаалга</h3>
           <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);text-align:center;line-height:1.55;margin:0 0 0.9rem">4–8 самбартай, луу, арслангийн дүрс угалзтай хосолсон</p>
           <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">
-            <span style="font-size:0.65rem;font-weight:600;color:#FF8C42;background:rgba(255,107,26,0.15);padding:3px 8px;border-radius:99px">Луу угалз</span>
+            <span style="font-size:0.65rem;font-weight:600;color:#FF8C42;background:rgba(255,107,26,0.15);padding:3px 8px;border-radius:99px">Луу хээ</span>
             <span style="font-size:0.65rem;font-weight:600;color:#FF8C42;background:rgba(255,107,26,0.15);padding:3px 8px;border-radius:99px">Арслан хээ</span>
             <span style="font-size:0.65rem;font-weight:600;color:#FF8C42;background:rgba(255,107,26,0.15);padding:3px 8px;border-radius:99px">Эвэр угалз</span>
           </div>
@@ -1388,6 +1247,120 @@ blockquote {
 <!-- GALLERY -->
 <div id="page-gallery" class="page pt-16 min-h-screen" style="background:#FAFAF8">
   <div class="max-w-screen-xl mx-auto px-4 py-8">
+
+    <\!-- ===== ХЭЭНИЙ АНГИЛАЛ ТОВЧ ===== -->
+    <div style="background:linear-gradient(180deg,#2c1206 0%,#1a0a02 100%);border-radius:20px;padding:2.5rem 2rem;margin-bottom:2rem;position:relative;overflow:hidden">
+      <\!-- Background grid -->
+      <div style="position:absolute;inset:0;opacity:0.04;background-image:repeating-linear-gradient(45deg,#FF6B1A 0,#FF6B1A 1px,transparent 0,transparent 50%);background-size:20px 20px;pointer-events:none;border-radius:20px"></div>
+      <div style="position:relative">
+        <div style="text-align:center;margin-bottom:2rem">
+          <span style="color:#FF8C38;font-size:0.72rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase">Угалз хээний сан</span>
+          <h2 style="font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:900;color:white;margin:0.5rem 0 0.4rem;text-shadow:0 2px 12px rgba(0,0,0,0.5)">Хээний бүрэн жагсаалт</h2>
+          <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin:0">Монгол гэрийн угалз хээг 5 үндсэн бүлгээр ангилсан — 1500+ нэр төрлийн дижитал сан</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1rem">
+          <\!-- Геометрийн -->
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.3);border-radius:14px;padding:1.25rem 1rem">
+            <div style="text-align:center;margin-bottom:0.875rem">
+              <div style="font-size:1.6rem;margin-bottom:0.4rem">📐</div>
+              <h3 style="color:#FF8C38;font-size:0.85rem;font-weight:800;margin:0 0 0.3rem">Геометрийн хээ</h3>
+              <div style="width:24px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Чагтан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Хас хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Өлзий хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Алхан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Түмэн наст хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Хаан бугуйвч</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Хатан сүйх</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Эрхий угалз</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Арга билэг хээ</span>
+            </div>
+            <div style="text-align:center;margin-top:0.6rem"><span style="color:#FF6B1A;font-size:0.68rem;font-weight:700">300+ хувилбар</span></div>
+          </div>
+          <\!-- Амьтдын -->
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.3);border-radius:14px;padding:1.25rem 1rem">
+            <div style="text-align:center;margin-bottom:0.875rem">
+              <div style="font-size:1.6rem;margin-bottom:0.4rem">🐉</div>
+              <h3 style="color:#FF8C38;font-size:0.85rem;font-weight:800;margin:0 0 0.3rem">Амьтдын дүрт хээ</h3>
+              <div style="width:24px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Луу хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Арслан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Барын хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Хангарди хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Эвэр угалз</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Загасан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Шувуун хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Эрвээхэй хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Аргалийн эвэр</span>
+            </div>
+            <div style="text-align:center;margin-top:0.6rem"><span style="color:#FF6B1A;font-size:0.68rem;font-weight:700">Дөрвөн хүчтэн</span></div>
+          </div>
+          <\!-- Ургамлын -->
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.3);border-radius:14px;padding:1.25rem 1rem">
+            <div style="text-align:center;margin-bottom:0.875rem">
+              <div style="font-size:1.6rem;margin-bottom:0.4rem">🌸</div>
+              <h3 style="color:#FF8C38;font-size:0.85rem;font-weight:800;margin:0 0 0.3rem">Ургамлын дүрст хээ</h3>
+              <div style="width:24px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Бадам цэцгийн угалз</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Цэцгэн хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Навчин угалз</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Лянхуа хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Замбага цэцэг</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Яргуйн хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Тооноолжин цэцэг</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Башир цэцэг</span>
+            </div>
+            <div style="text-align:center;margin-top:0.6rem"><span style="color:#FF6B1A;font-size:0.68rem;font-weight:700">Бадам &amp; цэцэг</span></div>
+          </div>
+          <\!-- Байгалийн -->
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.3);border-radius:14px;padding:1.25rem 1rem">
+            <div style="text-align:center;margin-bottom:0.875rem">
+              <div style="font-size:1.6rem;margin-bottom:0.4rem">🔥</div>
+              <h3 style="color:#FF8C38;font-size:0.85rem;font-weight:800;margin:0 0 0.3rem">Байгалийн хээ</h3>
+              <div style="width:24px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Гал угалз</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Усан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Уулан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Үүлэн хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Хамар угалз</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Солонгон хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Цахилгаан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Салхин хээ</span>
+            </div>
+            <div style="text-align:center;margin-top:0.6rem"><span style="color:#FF6B1A;font-size:0.68rem;font-weight:700">Гал &amp; ус &amp; уул</span></div>
+          </div>
+          <\!-- Шашны -->
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,107,26,0.3);border-radius:14px;padding:1.25rem 1rem">
+            <div style="text-align:center;margin-bottom:0.875rem">
+              <div style="font-size:1.6rem;margin-bottom:0.4rem">☸</div>
+              <h3 style="color:#FF8C38;font-size:0.85rem;font-weight:800;margin:0 0 0.3rem">Шашны утгатай хээ</h3>
+              <div style="width:24px;height:2px;background:#FF6B1A;margin:0 auto;border-radius:1px"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.3rem">
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Хорол хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Чандмань хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Зээ бад хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Нацагдорж</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Жанцан хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Дун хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Шүхэр хээ</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:0.72rem;padding:0.28rem 0.5rem;background:rgba(255,107,26,0.12);border-radius:5px;text-align:center">Найман тахил</span>
+            </div>
+            <div style="text-align:center;margin-top:0.6rem"><span style="color:#FF6B1A;font-size:0.68rem;font-weight:700">Найман тахил</span></div>
+          </div>
+        </div>
+        <p style="color:rgba(255,255,255,0.35);font-size:0.72rem;text-align:center;margin-top:1.5rem;margin-bottom:0">Эх сурвалж: Амармэнд — «Монгол гэрийн модны хээний дижитал сан» (1500+ нэр төрлийн угалз хээ)</p>
+      </div>
+    </div>
+
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
@@ -1778,6 +1751,11 @@ sb.auth.onAuthStateChange(async (event, session) => {
     const nu = document.getElementById('nav-user');
     if (na) na.style.display = 'flex';
     if (nu) nu.style.display = 'none';
+    // Reset profile page
+    const profNoauth = document.getElementById('prof-noauth');
+    const profAuth = document.getElementById('prof-auth');
+    if (profNoauth) profNoauth.style.display = 'block';
+    if (profAuth) profAuth.style.display = 'none';
   }
   loadPosts();
 });
@@ -2282,7 +2260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="background:linear-gradient(135deg,#0d0820,#1a0d35);border-radius:18px;padding:1.75rem;position:relative;overflow:hidden">
           <div style="position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle,rgba(120,80,200,0.15),transparent);border-radius:50%"></div>
           <div style="font-size:2.5rem;margin-bottom:0.75rem">🐉</div>
-          <h4 style="font-weight:900;color:#C8A0FF;font-size:1.1rem;margin-bottom:0.6rem">Луу угалз</h4>
+          <h4 style="font-weight:900;color:#C8A0FF;font-size:1.1rem;margin-bottom:0.6rem">Луу хээ</h4>
           <p style="color:rgba(255,255,255,0.7);font-size:0.85rem;line-height:1.75">Хүч чадал, хааны засаглал, ус, тэнгэрийн бэлгэдэл. Луу нь монгол угсаатны хамгийн эрхэм шүтлэгт амьтан бөгөөд гэрийн хаалгын дунд самбарт байршдаг. Мушгиасан биетэй, дөлөн сахалтай, хурдалж буй луугийн дүр нь нарийн сийлбэрээр гайхалтай сайхан урлагддаг.</p>
           <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
             <span style="background:rgba(120,80,200,0.2);color:#C8A0FF;font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:20px;border:1px solid rgba(120,80,200,0.3)">Хойд чиглэл</span>
